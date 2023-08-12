@@ -1,0 +1,58 @@
+enum UserRole {
+    Customer
+    Vendor
+}
+
+model User {
+    fields {
+        identity Identity @unique
+        name Text
+        role UserRole @default(UserRole.Customer)
+        photoUrl Text?
+    }
+
+    operations {
+        create createUser() with (name) {
+            @set(user.identity = ctx.identity)
+            @permission (expression: ctx.isAuthenticated)
+        }
+    }
+}
+
+model Place {
+    fields {
+        owner User
+        name Text
+        description Text? @default("Welcome to my new place!")
+        rating Number?
+        longitude Number?
+        latitude Number?
+    }
+
+    operations {
+        create createPlace() with (
+            owner.id,
+            name,
+            description,
+            rating,
+            longitude,
+            latitude
+        ) {
+            @permission (expression: ctx.isAuthenticated and place.owner.role == UserRole.Vendor)
+        }
+
+        get getPlace(id) {
+            @permission (expression: ctx.isAuthenticated)
+        }
+
+        list listPlaces(name) {
+            @permission (expression: ctx.isAuthenticated)
+        }
+    }
+}
+
+api Web {
+    models {
+        User
+    }
+}
