@@ -12,7 +12,7 @@ model User {
     }
 
     operations {
-        create createUser() with (name) {
+        create createUser() with (name, role) {
             @set(user.identity = ctx.identity)
             @permission (expression: ctx.isAuthenticated)
         }
@@ -54,5 +54,6 @@ model Place {
 api Web {
     models {
         User
+        Place
     }
 }
