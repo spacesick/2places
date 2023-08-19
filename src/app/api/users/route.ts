@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { APIClient } from "../../../../keelClient";
+import { APIClient, UserRole } from "../../../../keelClient";
 
 const client = new APIClient({
-  endpoint: process.env.API_BASE_URL!,
+  baseUrl: process.env.API_BASE_URL!,
 });
 
 export async function POST(req: NextRequest) {
   console.log(req);
   const { email, password } = await req.json();
-  const auth = await client.authenticate({
+  const auth = await client.actions.authenticate({
     emailPassword: {
       email,
       password,
@@ -25,9 +25,10 @@ export async function POST(req: NextRequest) {
   }
 
   if (auth.data.identityCreated) {
-    client._setToken(auth.data.token);
-    const user = await client.createUser({
+    client.client.setToken(auth.data.token);
+    const user = await client.actions.createUser({
       name: email.split("@")[0],
+      role: UserRole.Customer,
     });
 
     if (user.error) {

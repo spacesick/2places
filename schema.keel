@@ -1,18 +1,18 @@
-// enum UserRole {
-//     Customer
-//     Vendor
-// }
+enum UserRole {
+    Customer
+    Vendor
+}
 
 model User {
     fields {
         identity Identity @unique
         name Text
-        // role UserRole @default(UserRole.Customer)
+        role UserRole @default(UserRole.Customer)
         photoUrl Text?
     }
 
     operations {
-        create createUser() with (name) {
+        create createUser() with (name, role) {
             @set(user.identity = ctx.identity)
             @permission (expression: ctx.isAuthenticated)
         }
@@ -37,7 +37,9 @@ model Place {
             rating,
             longitude,
             latitude
-        )
+        ) {
+            @permission (expression: ctx.isAuthenticated and place.owner.role == UserRole.Vendor)
+        }
 
         get getPlace(id) {
             @permission (expression: ctx.isAuthenticated)
