@@ -246,6 +246,9 @@ export class APIClient extends Core {
         createUser : (i: CreateUserInput) => {
             return this.client.rawRequest<User>("createUser", i);
         },
+        getSelf : (i?: GetSelfInput) => {
+            return this.client.rawRequest<User | null>("getSelf", i);
+        },
         createPlace : (i: CreatePlaceInput) => {
             return this.client.rawRequest<Place>("createPlace", i);
         },
@@ -271,6 +274,7 @@ export class APIClient extends Core {
 
     api = {
         queries: {
+            getSelf: this.actions.getSelf.bind(this),
             getPlace: this.actions.getPlace.bind(this),
             listPlaces: this.actions.listPlaces.bind(this),
         },
@@ -291,11 +295,12 @@ export interface CreateUserInput {
     name: string;
     role: UserRole;
 }
+export interface GetSelfInput {
+}
 export interface CreatePlaceInput {
     owner: CreatePlaceOwnerInput;
     name: string;
     description: string | null;
-    rating: number | null;
     longitude: number | null;
     latitude: number | null;
 }

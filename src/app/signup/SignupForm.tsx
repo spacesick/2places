@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useContext, useState, FormEvent } from "react";
 
-type SignupFormData = {
+export type SignupFormData = {
   email: string;
   password: string;
 };
@@ -18,7 +18,7 @@ export const SignupForm = () => {
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const res = await fetch("/api/users", {
+    const res = await fetch("/api/vendors", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(signupFormData),

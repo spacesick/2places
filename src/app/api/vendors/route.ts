@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     client.client.setToken(auth.data.token);
     const user = await client.api.mutations.createUser({
       name: email.split("@")[0],
-      role: UserRole.Customer,
+      role: UserRole.Vendor,
     });
 
     if (user.error) {
