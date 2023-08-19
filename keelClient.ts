@@ -242,7 +242,7 @@ export class APIClient extends Core {
     constructor(config: RequestConfig) {
       super(config);
     }
-    actions = {
+    private actions = {
         createUser : (i: CreateUserInput) => {
             return this.client.rawRequest<User>("createUser", i);
         },

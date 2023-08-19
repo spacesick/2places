@@ -8,7 +8,7 @@ const client = new APIClient({
 export async function POST(req: NextRequest) {
   console.log(req);
   const { email, password } = await req.json();
-  const auth = await client.actions.authenticate({
+  const auth = await client.api.mutations.authenticate({
     emailPassword: {
       email,
       password,
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
 
   if (auth.data.identityCreated) {
     client.client.setToken(auth.data.token);
-    const user = await client.actions.createUser({
+    const user = await client.api.mutations.createUser({
       name: email.split("@")[0],
       role: UserRole.Customer,
     });
