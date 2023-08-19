@@ -16,6 +16,11 @@ model User {
             @set(user.identity = ctx.identity)
             @permission (expression: ctx.isAuthenticated)
         }
+
+        get getSelf() {
+            @where (user.identity == ctx.identity)
+            @permission (expression: ctx.isAuthenticated)
+        }
     }
 }
 
@@ -34,7 +39,6 @@ model Place {
             owner.id,
             name,
             description,
-            rating,
             longitude,
             latitude
         ) {
